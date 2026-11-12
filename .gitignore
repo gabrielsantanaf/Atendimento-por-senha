@@ -1,0 +1,10 @@
+# Executaveis
+cliente
+atendente
+teste_fila
+*.exe
+*.o
+
+# Gerados ao rodar
+fila.dat
+fila.lock
