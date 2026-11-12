@@ -1,0 +1,8 @@
+.git
+*.exe
+*.o
+cliente
+atendente
+teste_fila
+fila.dat
+fila.lock

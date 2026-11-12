@@ -1,0 +1,12 @@
+services:
+  dev:
+    build: .
+    image: atendimento-senhas-dev
+    container_name: atendimento-senhas
+    volumes:
+      - .:/app
+    working_dir: /app
+    # Mantem o container ligado para abrir varios terminais nele
+    # (um para o cliente, outro para o atendente) com "docker compose exec".
+    command: sleep infinity
+    init: true

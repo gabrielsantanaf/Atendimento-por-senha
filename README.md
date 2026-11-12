@@ -20,12 +20,58 @@ A documentação de arquitetura, backlog e sprints fica em [docs/](docs/).
 | `atendente.c` | Menu do atendente + demonstração linear × circular (`main` próprio) | D / B |
 | `testes/teste_fila.c` | Testes da fila (F-05) | A / B |
 | `docs/` | Documentação do projeto | — |
+| `compilar.sh` / `compilar.bat` | Compilam os três programas (Linux/Docker e Windows) | — |
+| `Dockerfile` / `docker-compose.yml` | Ambiente de desenvolvimento com gcc, gdb e valgrind | — |
 
 `fila.dat` e `fila.lock` são criados ao rodar e não vão para o repositório.
 
 As assinaturas de `fila.h` e `armazenamento.h` são o contrato entre as duplas: não mude sem combinar com o time.
 
-## Compilar
+## Opção 1: Docker (recomendado, ambiente igual para todos)
+
+Precisa do Docker Desktop aberto. A pasta do projeto é montada dentro do container:
+você edita no VS Code normalmente e compila/roda no container.
+
+```sh
+docker compose up -d --build      # sobe o container (só na primeira vez ou após mudar o Dockerfile)
+docker compose exec dev bash      # abre um terminal dentro do container
+```
+
+Dentro do container:
+
+```sh
+./compilar.sh
+./teste_fila
+```
+
+Para testar os dois programas juntos, abra **dois terminais** no Windows e rode
+`docker compose exec dev bash` em cada um. Depois:
+
+```sh
+./cliente      # terminal 1
+./atendente    # terminal 2
+```
+
+Os dois rodam no mesmo container e enxergam o mesmo `fila.dat` e `fila.lock`.
+
+Para desligar: `docker compose down`.
+
+O container também tem `gdb` e `valgrind` para depuração.
+
+## Opção 2: Windows nativo (gcc/MinGW no PATH)
+
+```bat
+compilar.bat
+```
+
+Depois, em dois terminais na pasta do projeto:
+
+```bat
+cliente.exe
+atendente.exe
+```
+
+## Comandos de compilação (o que os scripts fazem)
 
 ```sh
 gcc -Wall cliente.c fila.c armazenamento.c -o cliente
@@ -33,14 +79,8 @@ gcc -Wall atendente.c fila.c armazenamento.c -o atendente
 gcc -Wall -I. testes/teste_fila.c fila.c -o teste_fila
 ```
 
-## Executar
-
-Abra dois terminais na pasta do projeto:
-
-```sh
-./cliente      # terminal 1
-./atendente    # terminal 2
-```
+> Não misture: um `fila.dat` criado no Windows pode não ser lido corretamente pelo
+> programa compilado no Linux, e vice-versa. Se trocar de ambiente, apague o `fila.dat`.
 
 Se um programa fechar no meio e deixar o `fila.lock`, apague o arquivo na mão.
 

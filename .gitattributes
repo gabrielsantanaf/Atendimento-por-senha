@@ -1,0 +1,4 @@
+# Scripts de shell precisam de LF para rodar no Linux/Docker;
+# o .bat precisa de CRLF para rodar no Windows.
+*.sh  text eol=lf
+*.bat text eol=crlf
