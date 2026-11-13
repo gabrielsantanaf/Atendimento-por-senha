@@ -2,13 +2,26 @@
 
 /* F-01: fila nova tem qtd = 0, inicio = 0, fim = 0, proxima_senha = 1 */
 void inicializar(Fila *f) {
-    /* TODO (F-01) */
+    f->inicio = 0;
+    f->fim = 0;
+    f->qtd = 0;
+    f->proxima_senha = 1;
 }
+
 
 /* F-02: gera senhas em sequencia; fim avanca com (fim + 1) % TAM; -1 se cheia */
 int enfileirar(Fila *f) {
-    /* TODO (F-02) */
-    return -1;
+    if (f->qtd == TAM) {
+        return -1;
+    }
+    
+    int senha_gerada = f->proxima_senha;
+    f->senhas[f->fim] = senha_gerada;
+    f->fim = (f->fim + 1) % TAM;
+    f->qtd++;
+    f->proxima_senha++;
+    
+    return senha_gerada;
 }
 
 /* F-03: sai sempre a senha mais antiga; inicio avanca com (inicio + 1) % TAM; -1 se vazia */
