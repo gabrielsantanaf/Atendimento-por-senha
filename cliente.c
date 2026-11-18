@@ -3,15 +3,14 @@
  * Programa do cliente (Dupla D): gera senha e consulta posicao.
  * Compilar: gcc -Wall cliente.c fila.c armazenamento.c -o cliente
  */
+
 #include <stdio.h>
 #include "fila.h"
 #include "armazenamento.h"
 
 int main(void) {
     int opcao;
-
     Fila fila;
-    inicializar(&fila);
 
     do {
         printf("\n=== CLIENTE ===\n");
@@ -20,18 +19,26 @@ int main(void) {
         printf("0 - Sair\n");
         printf("Opcao: ");
 
-        if (scanf("%d", &opcao) != 1) break;
+        if (scanf("%d", &opcao) != 1) {
+            printf("Entrada invalida.\n");
+            return 1;
+        }
 
         switch (opcao) {
             case 1: {
+                travar();
+                carregar_fila(&fila);
+
                 int senha = enfileirar(&fila);
 
                 if (senha == -1) {
                     printf("Fila cheia! Nao foi possivel gerar senha.\n");
                 } else {
+                    salvar_fila(&fila);
                     printf("Sua senha e: %d\n", senha);
                 }
 
+                destravar();
                 break;
             }
 
@@ -45,7 +52,12 @@ int main(void) {
                     break;
                 }
 
+                travar();
+                carregar_fila(&fila);
+
                 int posicao = posicao_da_senha(&fila, senha);
+
+                destravar();
 
                 if (posicao == -1) {
                     printf("Senha nao encontrada na fila.\n");
