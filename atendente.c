@@ -13,9 +13,44 @@ static void demonstracao(void) {
     /* TODO (Dupla B) */
     printf("TODO: demonstracao linear x circular\n");
 }
+    /* I-04: mostra o estado atual da fila */
+    static void mostrar_fila(Fila *f) {
+        printf("\n=== ESTADO DA FILA ===\n");
 
+        printf("\nVetor:\n");
+
+        for (int i = 0; i < TAM; i++) {
+            int ocupado = 0;
+
+            for (int j = 0; j < f->qtd; j++) {
+                int indice = (f->inicio + j) % TAM;
+
+                if (indice == i) {
+                    ocupado = 1;
+                    break;
+                }
+            }
+
+            if (ocupado) {
+                printf("[%d] = %d\n", i, f->senhas[i]);
+            } else {
+                printf("[%d] = vazio\n", i);
+            }
+        }
+
+    printf("\nInicio: %d\n", f->inicio);
+    printf("Fim: %d\n", f->fim);
+    printf("Quantidade: %d\n", f->qtd);
+}
 int main(void) {
     int opcao;
+    Fila fila;
+    inicializar(&fila);
+ 
+    /* PREENCHIMENTO DA FILA */
+    enfileirar(&fila);
+    enfileirar(&fila);
+    enfileirar(&fila);  
 
     do {
         printf("\n=== ATENDENTE ===\n");
@@ -27,13 +62,20 @@ int main(void) {
         if (scanf("%d", &opcao) != 1) break;
 
         switch (opcao) {
-        case 1:
+        case 1:{
             /* TODO (I-03, depois I-05): travar -> carregar -> desenfileirar -> salvar -> destravar */
-            printf("TODO: chamar proxima\n");
+            int senha = desenfileirar(&fila);
+
+            if (senha == -1) {
+                printf("Nao existem senhas na fila.\n");
+            } else {
+                printf("Senha chamada: %d\n", senha);
+            }
+
             break;
+        }
         case 2:
-            /* TODO (I-04): mostrar vetor, inicio, fim e qtd */
-            printf("TODO: ver fila\n");
+            mostrar_fila(&fila);
             break;
         case 3:
             demonstracao();
