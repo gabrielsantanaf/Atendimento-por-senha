@@ -20,8 +20,12 @@
 #define ARQUIVO_FILA  "fila.dat"
 #define ARQUIVO_TRAVA "fila.lock"
 
+/* Em erro grave (arquivo corrompido, sem permissao, disco cheio) as funcoes
+   abaixo mostram a mensagem em stderr e encerram o programa. Se ele estava
+   com a trava, o fila.lock e apagado automaticamente na saida. */
+
 void carregar_fila(Fila *f);       /* fread da struct inteira; sem arquivo, inicializa fila nova */
-void salvar_fila(const Fila *f);   /* fwrite da struct inteira */
+void salvar_fila(const Fila *f);   /* fwrite num temporario + rename (troca atomica) */
 
 void travar(void);                 /* cria fila.lock com fopen(..., "wx"); se ja existe, espera 100 ms e tenta de novo */
 void destravar(void);              /* remove(fila.lock) */

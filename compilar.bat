@@ -1,16 +1,13 @@
 @echo off
-rem Compila os tres programas no Windows (precisa do gcc/MinGW no PATH).
+rem Compila os programas e os testes DENTRO do Docker (o projeto usa recursos do Linux).
+rem Precisa do Docker Desktop aberto.
 rem Uso: compilar.bat
 cd /d "%~dp0"
 
-gcc -Wall cliente.c fila.c armazenamento.c -o cliente.exe || goto erro
-gcc -Wall atendente.c fila.c armazenamento.c -o atendente.exe || goto erro
-gcc -Wall -I. testes\teste_fila.c fila.c -o teste_fila.exe || goto erro
-
-echo Compilado: cliente.exe atendente.exe teste_fila.exe
+docker compose run --rm dev ./compilar.sh || goto erro
 exit /b 0
 
 :erro
 echo.
-echo Falha na compilacao.
+echo Falha na compilacao. O Docker Desktop esta aberto?
 exit /b 1

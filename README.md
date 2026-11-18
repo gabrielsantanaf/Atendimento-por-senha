@@ -19,8 +19,9 @@ A documentação de arquitetura, backlog e sprints fica em [docs/](docs/).
 | `cliente.c` | Menu do cliente (`main` próprio) | D |
 | `atendente.c` | Menu do atendente + demonstração linear × circular (`main` próprio) | D / B |
 | `testes/teste_fila.c` | Testes da fila (F-05) | A / B |
+| `testes/teste_armazenamento.c` | Testes de aceite da A-01 e A-02 | C |
 | `docs/` | Documentação do projeto | — |
-| `compilar.sh` / `compilar.bat` | Compilam os três programas (Linux/Docker e Windows) | — |
+| `compilar.sh` / `compilar.bat` | Compilam programas e testes (`.bat` = atalho que compila no Docker) | — |
 | `Dockerfile` / `docker-compose.yml` | Ambiente de desenvolvimento com gcc, gdb e valgrind | — |
 
 `fila.dat` e `fila.lock` são criados ao rodar e não vão para o repositório.
@@ -42,6 +43,7 @@ Dentro do container:
 ```sh
 ./compilar.sh
 ./teste_fila
+./teste_armazenamento
 ```
 
 Para testar os dois programas juntos, abra **dois terminais** no Windows e rode
@@ -58,18 +60,16 @@ Para desligar: `docker compose down`.
 
 O container também tem `gdb` e `valgrind` para depuração.
 
-## Opção 2: Windows nativo (gcc/MinGW no PATH)
+## Atalho no Windows
+
+O projeto usa recursos do Linux (`fork`, `rename` atômico, `nanosleep`), então **não compila no Windows nativo**.
+O `compilar.bat` só é um atalho que compila dentro do Docker:
 
 ```bat
 compilar.bat
 ```
 
-Depois, em dois terminais na pasta do projeto:
-
-```bat
-cliente.exe
-atendente.exe
-```
+Para rodar os programas, use `docker compose exec dev bash` como acima.
 
 ## Comandos de compilação (o que os scripts fazem)
 
@@ -77,10 +77,8 @@ atendente.exe
 gcc -Wall cliente.c fila.c armazenamento.c -o cliente
 gcc -Wall atendente.c fila.c armazenamento.c -o atendente
 gcc -Wall -I. testes/teste_fila.c fila.c -o teste_fila
+gcc -Wall -I. testes/teste_armazenamento.c fila.c armazenamento.c -o teste_armazenamento
 ```
-
-> Não misture: um `fila.dat` criado no Windows pode não ser lido corretamente pelo
-> programa compilado no Linux, e vice-versa. Se trocar de ambiente, apague o `fila.dat`.
 
 Se um programa fechar no meio e deixar o `fila.lock`, apague o arquivo na mão.
 

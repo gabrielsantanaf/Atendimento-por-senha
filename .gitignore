@@ -2,9 +2,11 @@
 cliente
 atendente
 teste_fila
+teste_armazenamento
 *.exe
 *.o
 
 # Gerados ao rodar
 fila.dat
+fila.dat.tmp.*
 fila.lock
